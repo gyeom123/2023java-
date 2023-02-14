@@ -1,3 +1,7 @@
+package com.koreaIT.java.BAM;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -7,11 +11,14 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 
 		int lastArticleId = 0;
+	
+		List<Article> artrticles = new ArrayList<>();
+		//입력받은 정보(책)를 배열로 저장하는 ArrayList(책장)
 
 		while (true) {
 
 			System.out.printf("명령어 ) "); // 줄바꿈을 하지않고 한줄에 입력을 받기 위해 printf를 쓴다
-			String cmd = sc.nextLine();
+			String cmd = sc.nextLine().trim(); //trim() : 맨앞과 맨뒤에 있는 공백을 제거해주는 함수
 
 			if (cmd.length() == 0) {
 				System.out.println("명령어를 입력해주세요.");
@@ -31,6 +38,8 @@ public class Main {
 				String title = sc.nextLine(); //제목의  변수 : title
 				System.out.printf("내용 : ");
 				String body = sc.nextLine(); //내용의 변수 : body
+				
+				Article article = new Article(id,title,body);//입력받은 정보(종이)를 Article(노트)에 넘겨준다
 
 				System.out.printf("%d번게시글이 생성되었습니다\n", id);
 
@@ -53,8 +62,15 @@ public class Main {
 class Article {
 	int id; // 고유번호
 	String title; // 게시글 제목
-	String detail; // 게시글 내용
+	String body; // 게시글 내용
 	
+	Article(int id, String title, String body) {	
+		//외부에서 받아온 내용을 저장
+		this.id =id;
+		this.title =title;
+		this.body =body;
+	
+	}
 	
 
 }
