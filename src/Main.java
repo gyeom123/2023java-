@@ -6,11 +6,16 @@ public class Main {
 
 		Scanner sc = new Scanner(System.in);
 
-		sc.nextLine();
+		while (true) {
 
-		String cmd = sc.nextLine();
+			System.out.printf("명령어를 입력하세요 : "); //줄바꿈을 하지않고 한줄에 입력을 받기 위해 printf를 쓴다
+			String cmd = sc.nextLine();
 
-		System.out.println("입력된 명령어 : " + cmd);
+			if (cmd.equals("exit")) {
+				break; // 'cmd'변수안에 있는 문장이 "exit"경우 가장 가까운 반복문을 탈출한다.
+			}
+
+		}
 
 		System.out.println("==프로그램  종류==");
 
