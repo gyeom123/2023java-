@@ -40,10 +40,10 @@ public class Main {
 				String body = sc.nextLine(); // 내용의 변수 : body
 
 				Article article = new Article(id, title, body);// 입력받은 정보(종이)를 Article(노트)에 넘겨준다
-				articles.add(article);  
+				articles.add(article);
 				// 정보를 저장한 article(노트)를 articles(책장)에 넣어서(.add) 정보를 저장하겠다
-			    // 함수가 끝나면 정보가 사라지는 전역변수이므로 함수가 끝나기 전에 저장 
-				
+				// 함수가 끝나면 정보가 사라지는 전역변수이므로 함수가 끝나기 전에 저장
+
 				System.out.printf("%d번게시글이 생성되었습니다\n", id);
 
 			} else if (cmd.equals("article list")) {
@@ -60,19 +60,56 @@ public class Main {
 
 				}
 
-			} else if (cmd.equals("article detail 1")) {
+			} else if (cmd.startsWith("article detail ")) {
+				//startsWith : 입력받은 명령어가 "article detail "로 시작하는지 검사해주는 함수
+				
+				String[] cmdBits = cmd.split(" ");//split :(" ")을 기준으로 문장을 나눈다.
+				int id = Integer.parseInt(cmdBits[2]);
 
-				if (articles.size() == 0) {
-					System.out.println("1번 게시물이 없습니다.");
+				Article foundArticle = null;
+
+				for (int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+
+					if (id == article.id) {
+						foundArticle = article;
+						break;
+					}
+				} 
+				
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시물이 없습니다.\n",id);
 					continue;
 				}
+
+				System.out.printf("번호 : %d\n", foundArticle.id);
+				System.out.printf("날짜 : %s\n", "123123123");
+				System.out.printf("제목 : %s\n", foundArticle.title);
+				System.out.printf("내용 : %s\n", foundArticle.body);
+
+			} 
+			else if (cmd.startsWith("article detail ")) {
+			
+				String[] cmdBits = cmd.split(" ");
+				int id = Integer.parseInt(cmdBits[2]);
+
+				Article foundArticle = null;
+
+				for (int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+
+					if (id == article.id) {
+						foundArticle = article;
+						break;
+					}
+				} 
 				
-				for (int i = 0; i < articles.size(); i--) {
-					
-
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시물이 없습니다.\n",id);
+					continue;
 				}
-
-			} else {
+		
+			}else {
 				System.out.println("존재하지 않는 명령어 입니다.");
 			}
 
