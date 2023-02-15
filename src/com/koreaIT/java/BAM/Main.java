@@ -14,7 +14,9 @@ public class Main {
 
 		List<Article> articles = new ArrayList<>();
 		// 입력받은 정보(책)를 배열로 저장하는 ArrayList(책장), DB(데이터베이스)의 역할
-
+		
+		String qwe = Util.getNowDateStr();
+		
 		while (true) {
 
 			System.out.printf("명령어 ) "); // 줄바꿈을 하지않고 한줄에 입력을 받기 위해 printf를 쓴다
@@ -61,9 +63,9 @@ public class Main {
 				}
 
 			} else if (cmd.startsWith("article detail ")) {
-				//startsWith : 입력받은 명령어가 "article detail "로 시작하는지 검사해주는 함수
-				
-				String[] cmdBits = cmd.split(" ");//split :(" ")을 기준으로 문장을 나눈다.
+				// startsWith : 입력받은 명령어가 "article detail "로 시작하는지 검사해주는 함수
+
+				String[] cmdBits = cmd.split(" ");// split :(" ")을 기준으로 문장을 나눈다.
 				int id = Integer.parseInt(cmdBits[2]);
 
 				Article foundArticle = null;
@@ -75,10 +77,10 @@ public class Main {
 						foundArticle = article;
 						break;
 					}
-				} 
-				
+				}
+
 				if (foundArticle == null) {
-					System.out.printf("%d번 게시물이 없습니다.\n",id);
+					System.out.printf("%d번 게시물이 없습니다.\n", id);
 					continue;
 				}
 
@@ -87,29 +89,33 @@ public class Main {
 				System.out.printf("제목 : %s\n", foundArticle.title);
 				System.out.printf("내용 : %s\n", foundArticle.body);
 
-			} 
-			else if (cmd.startsWith("article detail ")) {
-			
+			} else if (cmd.startsWith("article delete ")) {
+
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 
-				Article foundArticle = null;
+				int foundArticle = -1;
 
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 
 					if (id == article.id) {
-						foundArticle = article;
+						foundArticle = i;
 						break;
 					}
-				} 
-				
-				if (foundArticle == null) {
-					System.out.printf("%d번 게시물이 없습니다.\n",id);
+				}
+
+				if (foundArticle == -1) {
+					System.out.printf("%d번 게시물이 없습니다.\n", id);
 					continue;
 				}
-		
-			}else {
+				
+				articles.remove(foundArticle); 
+				//articles에 입력받은 게시글(id)이 있는방(foundArticle)을 삭제한다
+				
+				System.out.printf("%d번 게시물이 삭제되었습니다.", id);
+
+			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
 			}
 
