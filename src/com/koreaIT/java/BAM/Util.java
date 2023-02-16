@@ -4,10 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Util {
-	// 현재 날짜 시간
-	public static String getNowDateStr() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	public static String gettine() {
+		//현재 날짜 시간 출력 
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 		Date time = new Date();
-		return format.format(time);
+
+		String time1 = format1.format(time);
+
+		return time1;
 	}
+
 }

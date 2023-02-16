@@ -14,9 +14,7 @@ public class Main {
 
 		List<Article> articles = new ArrayList<>();
 		// 입력받은 정보(책)를 배열로 저장하는 ArrayList(책장), DB(데이터베이스)의 역할
-		
-		String qwe = Util.getNowDateStr();
-		
+
 		while (true) {
 
 			System.out.printf("명령어 ) "); // 줄바꿈을 하지않고 한줄에 입력을 받기 위해 printf를 쓴다
@@ -41,7 +39,10 @@ public class Main {
 				System.out.printf("내용 : ");
 				String body = sc.nextLine(); // 내용의 변수 : body
 
-				Article article = new Article(id, title, body);// 입력받은 정보(종이)를 Article(노트)에 넘겨준다
+				String get_current_date_time = Util.gettine();
+				// Util.gettine() : Util파일에 있는 gettine() ☆현재 날짜시간출력 함수를 실행
+
+				Article article = new Article(id, title, body, get_current_date_time);// 입력받은 정보(종이)를 Article(노트)에 넘겨준다
 				articles.add(article);
 				// 정보를 저장한 article(노트)를 articles(책장)에 넣어서(.add) 정보를 저장하겠다
 				// 함수가 끝나면 정보가 사라지는 전역변수이므로 함수가 끝나기 전에 저장
@@ -85,7 +86,7 @@ public class Main {
 				}
 
 				System.out.printf("번호 : %d\n", foundArticle.id);
-				System.out.printf("날짜 : %s\n", "123123123");
+				System.out.printf("날짜 : %s\n", foundArticle.get_current_date_time);
 				System.out.printf("제목 : %s\n", foundArticle.title);
 				System.out.printf("내용 : %s\n", foundArticle.body);
 
@@ -94,26 +95,26 @@ public class Main {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 
-				int foundArticle = -1;
+				int foundIndex = -1;
 
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 
 					if (id == article.id) {
-						foundArticle = i;
+						foundIndex = i;
 						break;
 					}
 				}
 
-				if (foundArticle == -1) {
+				if (foundIndex == -1) {
 					System.out.printf("%d번 게시물이 없습니다.\n", id);
 					continue;
 				}
-				
-				articles.remove(foundArticle); 
-				//articles에 입력받은 게시글(id)이 있는방(foundArticle)을 삭제한다
-				
-				System.out.printf("%d번 게시물이 삭제되었습니다.", id);
+
+				articles.remove(foundIndex);
+				// articles에 입력받은 게시글(id)이 있는방(foundArticle)을 삭제(remove)한다.
+
+				System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);
 
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
@@ -132,12 +133,14 @@ class Article {
 	int id; // 고유번호
 	String title; // 게시글 제목
 	String body; // 게시글 내용
+	String get_current_date_time; // 게시글 작성시간
 
-	Article(int id, String title, String body) {
+	Article(int id, String title, String body, String get_current_date_time) {
 		// 외부에서 받아온 내용을 저장
 		this.id = id;
 		this.title = title;
 		this.body = body;
+		this.get_current_date_time = get_current_date_time;
 
 	}
 
