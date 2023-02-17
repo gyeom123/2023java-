@@ -5,15 +5,21 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
+	static List<Article> articles;
+
+	static {
+		articles = new ArrayList<>();
+	}
+
 	public static void main(String[] args) {
 		System.out.println("==프로그램 시작==");
 
 		Scanner sc = new Scanner(System.in);
 
-		int lastArticleId = 0;
+		int lastArticleId = 3;
 
-		List<Article> articles = new ArrayList<>();
-		// 입력받은 정보(책)를 배열로 저장하는 ArrayList(책장), DB(데이터베이스)의 역할
+		makeTestData();
 
 		while (true) {
 
@@ -42,7 +48,7 @@ public class Main {
 				String get_current_date_time = Util.gettine();
 				// Util.gettine() : Util파일에 있는 gettine() ☆현재 날짜시간출력 함수를 실행
 
-				Article article = new Article(id, get_current_date_time, title, body, 1);
+				Article article = new Article(id, get_current_date_time, title, body);
 				// 입력받은 정보(종이)를 Article(노트)에 넘겨준다
 
 				articles.add(article);
@@ -58,7 +64,7 @@ public class Main {
 					continue;
 				}
 
-				System.out.println("  번호 ㅣ   제목	ㅣ	날짜	ㅣ	조회수");
+				System.out.println("  번호 ㅣ   제목	ㅣ		날짜	ㅣ	조회수");
 				for (int i = articles.size() - 1; i >= 0; i--) {
 					Article article = articles.get(i);
 					System.out.printf("  %d ㅣ   %s	   ㅣ	%s	ㅣ	%d\n", article.id, article.title,
@@ -88,7 +94,7 @@ public class Main {
 					continue;
 				}
 
-				foundArticle.getViews();
+				foundArticle.getViewsCnt();
 
 				System.out.printf("번호 : %d\n", foundArticle.id);
 				System.out.printf("날짜 : %s\n", foundArticle.get_current_date_time.substring(0, 10)); // substring : 출력을
@@ -165,6 +171,20 @@ public class Main {
 		sc.close();
 	}
 
+	private static void makeTestData() {
+		System.out.println("게시물 테스트 데이터를 생성합니다.");
+
+//		String get_current_date_time = Util.gettine();
+
+//		Article article1 = new Article(1, get_current_date_time, " title1", "body1", 10);
+//		Article article2 = new Article(2, get_current_date_time, " title2", "body2", 20);
+//		Article article3 = new Article(3, get_current_date_time, " title3", "body3", 30);
+
+		articles.add(new Article(1, Util.gettine(), " 제목1", "내용1", 10));
+		articles.add(new Article(2, Util.gettine(), " 제목2", "내용2", 20));
+		articles.add(new Article(3, Util.gettine(), " 제목3", "내용3", 30));
+	}
+
 }
 
 class Article {
@@ -174,22 +194,23 @@ class Article {
 	String get_current_date_time; // 게시글 작성 날짜,시간
 	int views; // 게시글의 조회수
 
+	Article(int id, String get_current_date_time, String title, String body) {
+		this(id, get_current_date_time, title, body, 0); 
+		//오버로딩 : 생성자에서만 쓸 수 있고 생성자의 첫번째줄에 와야함 , 인자값이 맞는 다른 생성자에게 일을 맡기는 명령문
+	}
+
 	Article(int id, String get_current_date_time, String title, String body, int views) {
 		// 외부에서 받아온 내용을 저장
 		this.id = id;
 		this.title = title;
 		this.body = body;
 		this.get_current_date_time = get_current_date_time;
-		this.views = views;
+		this.views = 0;
 
 	}
 
-	Article() {
-		views = 0;
-	}
-
-	public void getViews() {
-		views++;
+	public void getViewsCnt() {
+		this.views++;
 	}
 
 }
