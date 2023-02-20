@@ -80,16 +80,7 @@ public class App {
 				String[] cmdBits = cmd.split(" ");// split :(" ")을 기준으로 문장을 나눈다.
 				int id = Integer.parseInt(cmdBits[2]);
 
-				Article foundArticle = null;
-
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-
-					if (id == article.id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleId(id);
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물이 없습니다.\n", id);
@@ -110,23 +101,14 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 
-				int foundIndex = -1;
+				Article foundArticle = getArticleId(id);
 
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-
-					if (id == article.id) {
-						foundIndex = i;
-						break;
-					}
-				}
-
-				if (foundIndex == -1) {
+				if (foundArticle == null) {
 					System.out.printf("%d번 게시물이 없습니다.\n", id);
 					continue;
 				}
 
-				articles.remove(foundIndex);
+				articles.remove(articles.indexOf(foundArticle));
 				// articles에 입력받은 게시글(id)이 있는방(foundArticle)을 삭제(remove)한다.
 
 				System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);
@@ -136,16 +118,7 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 
-				Article foundArticle = null;
-
-				for (int i = 0; i < articles.size(); i++) {
-					Article article = articles.get(i);
-
-					if (id == article.id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleId(id);
 
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물이 없습니다.\n", id);
@@ -171,6 +144,16 @@ public class App {
 		System.out.println("==프로그램  종류==");
 
 		sc.close();
+	}
+
+	private Article getArticleId(int id) {
+
+		for (Article article : articles) {
+			if (id == article.id) {
+				return article;
+			}
+		}
+		return null;
 	}
 
 	private void makeTestData() {
