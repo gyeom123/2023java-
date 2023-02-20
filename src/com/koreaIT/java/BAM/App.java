@@ -1,8 +1,12 @@
 package com.koreaIT.java.BAM;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.management.openmbean.TabularType;
+import javax.swing.plaf.nimbus.AbstractRegionPainter;
 
 import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.util.Util;
@@ -37,7 +41,30 @@ public class App {
 				break; // 'cmd'변수안에 있는 문장이 "exit"경우 가장 가까운 반복문을 탈출한다.
 			}
 
-			if (cmd.equals("article write")) {
+//			if (cmd.equals("member join")) {
+//
+//				System.out.printf("로그인 아이디  : ");
+//				String LoginID = sc.nextLine();
+//				
+//				while(true) {
+//				System.out.printf("로그인 비밀번호  : ");
+//				String loginPassword = sc.nextLine();
+//				System.out.printf("로그인 비멀번호 확인 : ");
+//				String loginPasswordCheck = sc.nextLine();
+//				
+//				if(loginPassword == loginPasswordCheck) {
+//					
+//				}
+//				
+//
+//				}
+//				
+//
+//				System.out.printf("(%s)회원님 환영합니다.\n", LoginID);
+//
+//			}
+
+			else if (cmd.equals("article write")) {
 
 				int id = lastArticleId + 1; // 회원이 가지고 있는 고유번호
 				lastArticleId = id;
@@ -59,19 +86,39 @@ public class App {
 
 				System.out.printf("%d번게시글이 생성되었습니다\n", id);
 
-			} else if (cmd.equals("article list")) {
+			} else if (cmd.startsWith("article list")) {
 
 				if (articles.size() == 0) {
-					System.out.println("게시글이 없습니다.");
+					System.out.println("게시글이 없습니다");
 					continue;
 				}
 
-				System.out.println("  번호 ㅣ   제목	ㅣ		날짜	ㅣ	조회수");
-				for (int i = articles.size() - 1; i >= 0; i--) {
-					Article article = articles.get(i);
-					System.out.printf("  %d ㅣ   %s	   ㅣ	%s	ㅣ	%d\n", article.id, article.title,
-							article.get_current_date_time, article.views);
+				String searchKeyword = cmd.substring("article list".length()).trim();
 
+				List<Article> printArticles = new ArrayList<>(articles);
+
+				if (searchKeyword.length() > 0) {
+					System.out.println("검색어 : " + searchKeyword);
+
+					printArticles.clear();
+
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {
+							printArticles.add(article);
+						}
+					}
+					if (printArticles.size() == 0) {
+						System.out.println("검색결과가 없습니다");
+						continue;
+					}
+				}
+
+				System.out.println("번호	|	제목	|		날짜		|	조회");
+
+				Collections.reverse(printArticles);
+				for (Article article : printArticles) {
+					System.out.printf("%d	|	%s	|	%s	|	%d\n", article.id, article.title,
+							article.get_current_date_time, article.views);
 				}
 
 			} else if (cmd.startsWith("article detail ")) {
@@ -144,6 +191,7 @@ public class App {
 		System.out.println("==프로그램  종류==");
 
 		sc.close();
+
 	}
 
 	private Article getArticleId(int id) {
