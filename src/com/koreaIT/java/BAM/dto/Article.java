@@ -1,11 +1,9 @@
-package com.koreaIT.java.BAM.dto; 
+package com.koreaIT.java.BAM.dto;
 
-public class Article {
+public class Article extends Dto {
 
-	public int id; // 게시글의 고유번호
 	public String title; // 게시글 제목
 	public String body; // 게시글 내용
-	public String get_current_date_time; // 게시글 작성 날짜,시간
 	public int views; // 게시글의 조회수
 
 	public Article(int id, String get_current_date_time, String title, String body) {
@@ -28,4 +26,3 @@ public class Article {
 	}
 
 }
-
