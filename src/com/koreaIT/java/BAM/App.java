@@ -41,24 +41,42 @@ public class App {
 			if (cmd.equals("exit")) {
 				break; // 'cmd'변수안에 있는 문장이 "exit"경우 가장 가까운 반복문을 탈출한다.
 			}
-
-			if (cmd.equals("member join")) {
-				memberController.dojoin();
+			
+			String[] cmdBits = cmd.split(" ");// article write , member join
+			String controllerMessage = cmdBits[0];//write, join
+			String methodMessage = cmdBits[1];
+			
+			if(cmdBits.length == 1) {
+				System.out.println("존재하지 않는 명령어 입니다.\n");
+				continue;
 			}
-
-			else if (cmd.equals("article write")) {
-				articleController.doWrite();
-			} else if (cmd.startsWith("article list")) {
-				articleController.showList(cmd);
-			} else if (cmd.startsWith("article detail ")) {
-				articleController.showDetail(cmd);
-			} else if (cmd.startsWith("article delete ")) {
-				articleController.doDelete(cmd);
-			} else if (cmd.startsWith("article modify ")) {
-				articleController.doModify(cmd);
-			} else {
-				System.out.println("존재하지 않는 명령어 입니다.");
+			
+			if(controllerMessage.equals("article")) {
+				articleController.doAdtion(cmd,methodMessage);
+			}else if(controllerMessage.equals("member")) {
+				memberController.doAdtion(cmd,methodMessage);
 			}
+			else {
+				System.out.println("존재하지 않는 명령어 입니다.\n");
+				continue;
+			}
+			
+//			if (cmd.equals("member join")) {
+//				memberController.dojoin();
+//			}
+//			else if (cmd.equals("article write")) {
+//				articleController.doWrite();
+//			} else if (cmd.startsWith("article list")) {
+//				articleController.showList(cmd);
+//			} else if (cmd.startsWith("article detail ")) {
+//				articleController.showDetail(cmd);
+//			} else if (cmd.startsWith("article delete ")) {
+//				articleController.doDelete(cmd);
+//			} else if (cmd.startsWith("article modify ")) {
+//				articleController.doModify(cmd);
+//			} else {
+//				System.out.println("존재하지 않는 명령어 입니다.");
+//			}
 		}
 
 		System.out.println("==프로그램  종류==");

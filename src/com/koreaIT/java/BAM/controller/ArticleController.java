@@ -13,11 +13,34 @@ public class ArticleController {
 	List<Article> articles;
 	Scanner sc;
 	int lastArticleId;
+	String cmd;
 
-	public ArticleController(List<Article> articles2, Scanner sc2) {
+	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
 		this.sc = sc;
 		this.lastArticleId = 0;
+	}
+
+	public void doAdtion(String cmd, String methodMessage) {
+		this.cmd = cmd;
+
+		switch (methodMessage) {
+		case "write":
+			doWrite();
+			break;
+		case "list":
+			showList();
+			break;
+		case "detail":
+			showDetail();
+			break;
+		case "delete":
+			doDelete();
+			break;
+		case "modify":
+			doModify();
+			break;
+		}
 	}
 
 	public void doWrite() {
@@ -43,7 +66,7 @@ public class ArticleController {
 
 	}
 
-	public void showList(String cmd) {
+	public void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다");
 			return; // 리턴으로 함수를 종료시키되 넘겨주는 값은 없다.
@@ -78,7 +101,7 @@ public class ArticleController {
 		}
 	}
 
-	public void showDetail(String cmd) {
+	public void showDetail() {
 		// startsWith : 입력받은 명령어가 "article detail "로 시작하는지 검사해주는 함수
 
 		String[] cmdBits = cmd.split(" ");// split :(" ")을 기준으로 문장을 나눈다.
@@ -102,7 +125,7 @@ public class ArticleController {
 
 	}
 
-	public void doDelete(String cmd) {
+	public void doDelete() {
 		String[] cmdBits = cmd.split(" ");
 		int id = Integer.parseInt(cmdBits[2]);
 
@@ -120,7 +143,7 @@ public class ArticleController {
 
 	}
 
-	public void doModify(String cmd) {
+	public void doModify() {
 		String[] cmdBits = cmd.split(" ");
 		int id = Integer.parseInt(cmdBits[2]);
 

@@ -10,14 +10,25 @@ public class MemberController {
 
 	List<Member> members;
 	Scanner sc;
-	int lastMemberId ;
+	int lastMemberId;
+	String cmd;
 
 	public MemberController(List<Member> members, Scanner sc) {
-		//외부(App)에서 만든 리모콘을 넘겨받고 조정할 수 있게 
+		// 외부(App)에서 만든 리모콘을 넘겨받고 조정할 수 있게
 		this.members = members;
 		this.sc = sc;
 		this.lastMemberId = 0;
+
+	}
+
+	public void doAdtion(String cmd, String methodMessage) {
+		this.cmd = cmd;
 		
+		switch (methodMessage) {
+		case "join":
+			dojoin();
+			break;
+		}
 	}
 
 	public void dojoin() {
