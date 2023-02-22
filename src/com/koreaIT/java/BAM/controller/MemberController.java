@@ -1,5 +1,6 @@
 package com.koreaIT.java.BAM.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,18 +13,17 @@ public class MemberController extends Controller {
 	private Scanner sc;
 	private int lastMemberId;
 
-	public MemberController(List<Member> members, Scanner sc) {
+	public MemberController(Scanner sc) {
 		// 외부(App)에서 만든 리모콘을 넘겨받고 조정할 수 있게
-		this.members = members;
+		this.members = new ArrayList<>();
 		this.sc = sc;
 		this.lastMemberId = 0;
-
 	}
 
 	@Override
 	public void doAction(String cmd, String methodName) {
 
-		switch(methodName) {
+		switch (methodName) {
 		case "join":
 			dojoin();
 			break;

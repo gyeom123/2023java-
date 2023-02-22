@@ -15,16 +15,17 @@ public class ArticleController extends Controller {
 	private int lastArticleId;
 	private String cmd;
 
-	public ArticleController(List<Article> articles, Scanner sc) {
-		this.articles = articles;
+	public ArticleController(Scanner sc) {
+		this.articles = new ArrayList<>();
 		this.sc = sc;
 		this.lastArticleId = 0;
 	}
 
+	@Override
 	public void doAction(String cmd, String methodName) {
 		this.cmd = cmd;
 
-		switch(methodName) {
+		switch (methodName) {
 		case "write":
 			doWrite();
 			break;
@@ -47,7 +48,7 @@ public class ArticleController extends Controller {
 	}
 
 	private void doWrite() {
-		int id = articles.size()+ 1; // 회원이 가지고 있는 고유번호
+		int id = articles.size() + 1; // 회원이 가지고 있는 고유번호
 		lastArticleId = id;
 
 		System.out.printf("제목 : ");
@@ -195,6 +196,19 @@ public class ArticleController extends Controller {
 			}
 		}
 		return null;
+	}
+
+	public void makeTestData() {
+		System.out.println("게시물 테스트 데이터를 생성합니다.");
+
+//		String get_current_date_time = Util.gettine();
+
+//		Article article1 = new Article(1, get_current_date_time, " title1", "body1", 10);
+//		Article article2 = new Article(2, get_current_date_time, " title2", "body2", 20);
+//		Article article3 = new Article(3, get_current_date_time, " title3", "body3", 30);
+		articles.add(new Article(1, Util.gettine(), " 제목1", "내용1", 10));
+		articles.add(new Article(2, Util.gettine(), " 제목2", "내용2", 20));
+		articles.add(new Article(3, Util.gettine(), " 제목3", "내용3", 30));
 	}
 
 }

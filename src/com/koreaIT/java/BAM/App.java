@@ -26,10 +26,10 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 
-		makeTestData();
+		MemberController memberController = new MemberController(sc);
+		ArticleController articleController = new ArticleController(sc);
 
-		MemberController memberController = new MemberController(members, sc);
-		ArticleController articleController = new ArticleController(articles, sc);
+		articleController.makeTestData();
 
 		while (true) {
 
@@ -45,17 +45,16 @@ public class App {
 			}
 
 			String[] cmdBits = cmd.split(" ");// article write , member join
-			
+
 			if (cmdBits.length == 1) {
 				System.out.println("명령어를 확인해주세요.");
 				continue;
 			}
-			
+
 			String controllerMessage = cmdBits[0];// write, join
 			String methodMessage = cmdBits[1];
 
 			Controller controller = null;
-
 
 			if (controllerMessage.equals("article")) {
 				controller = articleController;
@@ -72,18 +71,4 @@ public class App {
 
 		sc.close();
 	}
-
-	private void makeTestData() {
-		System.out.println("게시물 테스트 데이터를 생성합니다.");
-
-//		String get_current_date_time = Util.gettine();
-
-//		Article article1 = new Article(1, get_current_date_time, " title1", "body1", 10);
-//		Article article2 = new Article(2, get_current_date_time, " title2", "body2", 20);
-//		Article article3 = new Article(3, get_current_date_time, " title3", "body3", 30);
-		articles.add(new Article(1, Util.gettine(), " 제목1", "내용1", 10));
-		articles.add(new Article(2, Util.gettine(), " 제목2", "내용2", 20));
-		articles.add(new Article(3, Util.gettine(), " 제목3", "내용3", 30));
-	}
-
 }
