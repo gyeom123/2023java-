@@ -8,12 +8,12 @@ import java.util.Scanner;
 import com.koreaIT.java.BAM.dto.Article;
 import com.koreaIT.java.BAM.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 
-	List<Article> articles;
-	Scanner sc;
-	int lastArticleId;
-	String cmd;
+	private List<Article> articles;
+	private Scanner sc;
+	private int lastArticleId;
+	private String cmd;
 
 	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
@@ -21,10 +21,10 @@ public class ArticleController {
 		this.lastArticleId = 0;
 	}
 
-	public void doAdtion(String cmd, String methodMessage) {
+	public void doAction(String cmd, String methodName) {
 		this.cmd = cmd;
 
-		switch (methodMessage) {
+		switch(methodName) {
 		case "write":
 			doWrite();
 			break;
@@ -34,17 +34,20 @@ public class ArticleController {
 		case "detail":
 			showDetail();
 			break;
+		case "modify":
+			doModify();
+			break;
 		case "delete":
 			doDelete();
 			break;
-		case "modify":
-			doModify();
+		default:
+			System.out.println("존재하지 않는 명령어 입니다");
 			break;
 		}
 	}
 
-	public void doWrite() {
-		int id = lastArticleId + 1; // 회원이 가지고 있는 고유번호
+	private void doWrite() {
+		int id = articles.size()+ 1; // 회원이 가지고 있는 고유번호
 		lastArticleId = id;
 
 		System.out.printf("제목 : ");
@@ -66,7 +69,7 @@ public class ArticleController {
 
 	}
 
-	public void showList() {
+	private void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다");
 			return; // 리턴으로 함수를 종료시키되 넘겨주는 값은 없다.
@@ -101,10 +104,16 @@ public class ArticleController {
 		}
 	}
 
-	public void showDetail() {
+	private void showDetail() {
 		// startsWith : 입력받은 명령어가 "article detail "로 시작하는지 검사해주는 함수
 
 		String[] cmdBits = cmd.split(" ");// split :(" ")을 기준으로 문장을 나눈다.
+
+		if (cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+
 		int id = Integer.parseInt(cmdBits[2]);
 
 		Article foundArticle = getArticleId(id);
@@ -125,8 +134,14 @@ public class ArticleController {
 
 	}
 
-	public void doDelete() {
+	private void doDelete() {
 		String[] cmdBits = cmd.split(" ");
+
+		if (cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+
 		int id = Integer.parseInt(cmdBits[2]);
 
 		Article foundArticle = getArticleId(id);
@@ -145,6 +160,12 @@ public class ArticleController {
 
 	public void doModify() {
 		String[] cmdBits = cmd.split(" ");
+
+		if (cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+
 		int id = Integer.parseInt(cmdBits[2]);
 
 		Article foundArticle = getArticleId(id);
