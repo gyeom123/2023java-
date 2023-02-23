@@ -27,10 +27,35 @@ public class MemberController extends Controller {
 		case "join":
 			dojoin();
 			break;
+		case "login":
+			doLogin();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다");
 			break;
 		}
+	}
+
+	private void doLogin() {
+
+		System.out.printf("로그인 아이디  : ");
+		String LoginID = sc.nextLine();
+		System.out.printf("로그인 비밀번호  : ");
+		String LoginPasswordheck = sc.nextLine();
+
+		Member member = getMembeByLoginId(LoginID);
+
+		if (member == null) {
+			System.err.println("존재하지 않는 아이디 입니다.");
+			return;
+		}
+		if (member.LoginPassword.equals(LoginPasswordheck) == false) {
+			System.err.println("비밀번호를 확인해주세요");
+			return;
+
+		}
+
+		System.err.printf("%s님 환영합니다.",member.name);
 	}
 
 	private void dojoin() {
@@ -84,14 +109,22 @@ public class MemberController extends Controller {
 		System.out.printf("%s회원님의 회원가입이 환영합니다.\n", name);
 	}
 
-	private boolean LoginIdDupchk(String LoginID) {
-
+	private Member getMembeByLoginId(String loginID) {
 		for (Member member : members) {
-			if (member.LoginID.equals(LoginID)) {
-				return false;
+			if (member.LoginID.equals(loginID)) {
+				return member;
 			}
 		}
+		return null;
+	}
 
+	private boolean LoginIdDupchk(String LoginID) {
+
+		Member member = getMembeByLoginId(LoginID);
+
+		if (member != null) {
+			return false;
+		}
 		return true;
 	}
 
