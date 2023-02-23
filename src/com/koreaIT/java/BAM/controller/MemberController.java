@@ -55,9 +55,9 @@ public class MemberController extends Controller {
 		String LoginID = sc.nextLine();
 		System.out.printf("로그인 비밀번호  : ");
 		String LoginPasswordheck = sc.nextLine();
-
+		
 		Member member = getMembeByLoginId(LoginID);
-
+		
 		if (member == null) {
 			System.err.println("존재하지 않는 아이디 입니다.");
 			return;
@@ -65,7 +65,6 @@ public class MemberController extends Controller {
 		if (member.LoginPassword.equals(LoginPasswordheck) == false) {
 			System.err.println("비밀번호를 확인해주세요");
 			return;
-
 		}
 
 		this.loginedMember = member;
@@ -177,10 +176,9 @@ public class MemberController extends Controller {
 
 	public void makeTestData() {
 		System.out.println("로그인 테스트 데이터를 생성합니다.");
-
-		members.add(new Member(1, Util.gettine(), " test1", "test1", "테스트1"));
-		members.add(new Member(2, Util.gettine(), " test2", "test2", "테스트2"));
-		members.add(new Member(3, Util.gettine(), " test3", "test3", "테스트3"));
+		members.add(new Member(1, Util.gettine(), "test1", "test1", "테스트1"));
+		members.add(new Member(2, Util.gettine(), "test2", "test2", "테스트2"));
+		members.add(new Member(3, Util.gettine(), "test3", "test3", "테스트3"));
 
 	}
 

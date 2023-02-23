@@ -18,7 +18,7 @@ public class ArticleController extends Controller {
 	public ArticleController(Scanner sc) {
 		this.articles = new ArrayList<>();
 		this.sc = sc;
-		this.lastArticleId = 0;
+		this.lastArticleId = 3;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class ArticleController extends Controller {
 	}
 
 	private void doWrite() {
-		int id = articles.size() + 1; // 회원이 가지고 있는 고유번호
+		int id = lastArticleId + 1; // 회원이 가지고 있는 고유번호
 		lastArticleId = id;
 
 		System.out.printf("제목 : ");
