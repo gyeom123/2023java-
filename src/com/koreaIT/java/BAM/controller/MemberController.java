@@ -12,12 +12,14 @@ public class MemberController extends Controller {
 	private List<Member> members;
 	private Scanner sc;
 	private int lastMemberId;
+	private Member loginedMember;
 
 	public MemberController(Scanner sc) {
 		// 외부(App)에서 만든 리모콘을 넘겨받고 조정할 수 있게
 		this.members = new ArrayList<>();
 		this.sc = sc;
-		this.lastMemberId = 0;
+		this.lastMemberId = 3;
+		this.loginedMember = null;
 	}
 
 	@Override
@@ -30,13 +32,22 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "logout":
+			doLogout();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다");
 			break;
 		}
 	}
 
+
 	private void doLogin() {
+
+		if (isLoqined()) {
+			System.out.println("로그아웃 후 이용해주세요");
+			return;
+		}
 
 		System.out.printf("로그인 아이디  : ");
 		String LoginID = sc.nextLine();
@@ -55,9 +66,21 @@ public class MemberController extends Controller {
 
 		}
 
-		System.err.printf("%s님 환영합니다.",member.name);
+		this.loginedMember = member;
+
+		System.err.printf("%s님 환영합니다.\n", member.name);
 	}
 
+
+	private void doLogout() {
+		if(isLoqined() == false) {
+			System.out.println("로그인 후 이용해주세요");
+			return;
+		}
+		this.loginedMember = null;
+		System.out.println("로그아웃 되었습니다.");
+	}
+	
 	private void dojoin() {
 		int id = lastMemberId + 1; // 회원이 가지고 있는 고유번호
 		lastMemberId = id;
@@ -110,6 +133,7 @@ public class MemberController extends Controller {
 	}
 
 	private Member getMembeByLoginId(String loginID) {
+		// 로그인 아이디 확인 후 해당 아이디가 맞을 경우 해당 아이디가 있는 객체를 연결한다
 		for (Member member : members) {
 			if (member.LoginID.equals(loginID)) {
 				return member;
@@ -126,6 +150,19 @@ public class MemberController extends Controller {
 			return false;
 		}
 		return true;
+	}
+
+	private boolean isLoqined() {
+		return loginedMember != null;
+	}
+
+	public void makeTestData() {
+		System.out.println("로그인 테스트 데이터를 생성합니다.");
+
+		members.add(new Member(1, Util.gettine(), " test1", "test1", "Name1"));
+		members.add(new Member(2, Util.gettine(), " test2", "test2", "Name2"));
+		members.add(new Member(3, Util.gettine(), " test3", "test3", "Name3"));
+
 	}
 
 }
