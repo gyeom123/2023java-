@@ -27,6 +27,10 @@ public class ArticleController extends Controller {
 
 		switch (methodName) {
 		case "write":
+			if (isLoqined() == false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
 			doWrite();
 			break;
 		case "list":
@@ -36,9 +40,17 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		case "modify":
+			if (isLoqined() == false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
 			doModify();
 			break;
 		case "delete":
+			if (isLoqined() == false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
 			doDelete();
 			break;
 		default:
@@ -49,11 +61,6 @@ public class ArticleController extends Controller {
 
 	// 게시글 작성 함수
 	private void doWrite() {
-		
-		if (isLoqined() == false) {
-			System.out.println("로그인 후 이용해주세요");
-			return;
-		}
 
 		int id = lastArticleId + 1; // 회원이 가지고 있는 고유번호
 		lastArticleId = id;
@@ -66,7 +73,7 @@ public class ArticleController extends Controller {
 		String get_current_date_time = Util.gettine();
 		// Util.gettine() : Util파일에 있는 gettine() ☆현재 날짜시간출력 함수를 실행
 
-		Article article = new Article(id, get_current_date_time, title, body);
+		Article article = new Article(id, get_current_date_time, loginedMember.id, title, body);
 		// 입력받은 정보(종이)를 Article(노트)에 넘겨준다
 
 		articles.add(article);
@@ -74,7 +81,6 @@ public class ArticleController extends Controller {
 		// 함수가 끝나면 정보가 사라지는 전역변수이므로 함수가 끝나기 전에 저장
 
 		System.out.printf("%d번게시글이 생성되었습니다\n", id);
-
 	}
 
 	// 게시글 보기, 게시글 검색 기능 함수
@@ -104,12 +110,12 @@ public class ArticleController extends Controller {
 			}
 		}
 
-		System.out.println("번호	|	제목	|		날짜		|	조회");
+		System.out.println("번호	|	제목	|		날짜		|	작성자	|	조회");
 
 		Collections.reverse(printArticles);
 		for (Article article : printArticles) {
-			System.out.printf("%d	|	%s	|	%s	|	%d\n", article.id, article.title, article.get_current_date_time,
-					article.views);
+			System.out.printf("%d	|	%s	|	%s	|	%d	|	%d\n", article.id, article.title,
+					article.get_current_date_time, article.loginMembeId, article.views);
 		}
 	}
 
@@ -138,6 +144,7 @@ public class ArticleController extends Controller {
 		System.out.printf("번호 : %d\n", foundArticle.id);
 		System.out.printf("날짜 : %s\n", foundArticle.get_current_date_time.substring(0, 10)); // substring : 출력을
 																								// 짤라주는 함수
+		System.out.printf("작성자 : %d\n", foundArticle.loginMembeId);
 		System.out.printf("제목 : %s\n", foundArticle.title);
 		System.out.printf("내용 : %s\n", foundArticle.body);
 		System.out.printf("조회수 : %d\n", foundArticle.views);
@@ -157,8 +164,8 @@ public class ArticleController extends Controller {
 
 		Article foundArticle = getArticleId(id);
 
-		if (foundArticle == null) {
-			System.out.printf("%d번 게시물이 없습니다.\n", id);
+		if(isLoginMemberId(foundArticle)) {
+			System.out.println("권한이 없습니다.");
 			return;
 		}
 
@@ -169,7 +176,7 @@ public class ArticleController extends Controller {
 
 	}
 
-	// 원하는 게시글 삭제 함수
+	// 원하는 게시글 수정 함수
 	public void doModify() {
 		String[] cmdBits = cmd.split(" ");
 
@@ -186,7 +193,16 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물이 없습니다.\n", id);
 			return;
 		}
+		if(isLoginMemberId(foundArticle)) {
+			System.out.println("권한이 없습니다.");
+			return;
+		}
 
+//		if (foundArticle.loginMembeId != loginedMember.id) {
+//			System.out.println("권한이 없습니다.");
+//			return;
+//		}
+		
 		System.out.printf("수정할 제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("수정할 내용 : ");
@@ -196,12 +212,15 @@ public class ArticleController extends Controller {
 		foundArticle.body = body;
 
 		System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
+	}
 
+	//게시글 작성자와 로그인을 한 작성자가 동일한지 검사하는 함수
+	private boolean isLoginMemberId(Article foundArticle) {
+		return foundArticle.loginMembeId != loginedMember.id;
 	}
 
 	// 사용자가 원하는 게시글이 있는 객체를 알려주는 함수
 	private Article getArticleId(int id) {
-
 		for (Article article : articles) {
 			if (id == article.id) {
 				return article;
@@ -219,9 +238,9 @@ public class ArticleController extends Controller {
 //		Article article1 = new Article(1, get_current_date_time, " title1", "body1", 10);
 //		Article article2 = new Article(2, get_current_date_time, " title2", "body2", 20);
 //		Article article3 = new Article(3, get_current_date_time, " title3", "body3", 30);
-		articles.add(new Article(1, Util.gettine(), " 제목1", "내용1", 10));
-		articles.add(new Article(2, Util.gettine(), " 제목2", "내용2", 20));
-		articles.add(new Article(3, Util.gettine(), " 제목3", "내용3", 30));
+		articles.add(new Article(1, Util.gettine(), 1, " 제목1", "내용1", 10));
+		articles.add(new Article(2, Util.gettine(), 2, " 제목2", "내용2", 20));
+		articles.add(new Article(3, Util.gettine(), 3, " 제목3", "내용3", 30));
 	}
 
 }
