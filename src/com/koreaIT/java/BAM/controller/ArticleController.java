@@ -10,10 +10,10 @@ import com.koreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller {
 
-	private List<Article> articles;
+	private List<Article> articles; // 모든 게시글을 저장하고 있는 변수
 	private Scanner sc;
-	private int lastArticleId;
-	private String cmd;
+	private int lastArticleId;// 게시글의 방번호를 저장하는 변수
+	private String cmd;// 사용자가 원하는 명령을 저장하는 함수
 
 	public ArticleController(Scanner sc) {
 		this.articles = new ArrayList<>();
@@ -47,7 +47,14 @@ public class ArticleController extends Controller {
 		}
 	}
 
+	// 게시글 작성 함수
 	private void doWrite() {
+		
+		if (isLoqined() == false) {
+			System.out.println("로그인 후 이용해주세요");
+			return;
+		}
+
 		int id = lastArticleId + 1; // 회원이 가지고 있는 고유번호
 		lastArticleId = id;
 
@@ -70,6 +77,7 @@ public class ArticleController extends Controller {
 
 	}
 
+	// 게시글 보기, 게시글 검색 기능 함수
 	private void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다");
@@ -105,6 +113,7 @@ public class ArticleController extends Controller {
 		}
 	}
 
+	// 게시글 상세 보기 함수
 	private void showDetail() {
 		// startsWith : 입력받은 명령어가 "article detail "로 시작하는지 검사해주는 함수
 
@@ -135,6 +144,7 @@ public class ArticleController extends Controller {
 
 	}
 
+	// 원하는 게시글 삭제 함수
 	private void doDelete() {
 		String[] cmdBits = cmd.split(" ");
 
@@ -159,6 +169,7 @@ public class ArticleController extends Controller {
 
 	}
 
+	// 원하는 게시글 삭제 함수
 	public void doModify() {
 		String[] cmdBits = cmd.split(" ");
 
@@ -188,6 +199,7 @@ public class ArticleController extends Controller {
 
 	}
 
+	// 사용자가 원하는 게시글이 있는 객체를 알려주는 함수
 	private Article getArticleId(int id) {
 
 		for (Article article : articles) {
@@ -198,6 +210,7 @@ public class ArticleController extends Controller {
 		return null;
 	}
 
+	// 아티클스 테스트 데이터
 	public void makeTestData() {
 		System.out.println("게시물 테스트 데이터를 생성합니다.");
 
