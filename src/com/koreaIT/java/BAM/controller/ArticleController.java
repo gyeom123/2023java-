@@ -27,10 +27,7 @@ public class ArticleController extends Controller {
 
 		switch (methodName) {
 		case "write":
-			if (isLoqined() == false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
+
 			doWrite();
 			break;
 		case "list":
@@ -40,17 +37,11 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		case "modify":
-			if (isLoqined() == false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
+
 			doModify();
 			break;
 		case "delete":
-			if (isLoqined() == false) {
-				System.out.println("로그인 후 이용해주세요");
-				break;
-			}
+
 			doDelete();
 			break;
 		default:
@@ -115,7 +106,7 @@ public class ArticleController extends Controller {
 		Collections.reverse(printArticles);
 		for (Article article : printArticles) {
 			System.out.printf("%d	|	%s	|	%s	|	%d	|	%d\n", article.id, article.title,
-					article.get_current_date_time, article.loginMembeId, article.views);
+					article.get_current_date_time, article.MembeId, article.views);
 		}
 	}
 
@@ -144,7 +135,7 @@ public class ArticleController extends Controller {
 		System.out.printf("번호 : %d\n", foundArticle.id);
 		System.out.printf("날짜 : %s\n", foundArticle.get_current_date_time.substring(0, 10)); // substring : 출력을
 																								// 짤라주는 함수
-		System.out.printf("작성자 : %d\n", foundArticle.loginMembeId);
+		System.out.printf("작성자 : %d\n", foundArticle.MembeId);
 		System.out.printf("제목 : %s\n", foundArticle.title);
 		System.out.printf("내용 : %s\n", foundArticle.body);
 		System.out.printf("조회수 : %d\n", foundArticle.views);
@@ -164,7 +155,7 @@ public class ArticleController extends Controller {
 
 		Article foundArticle = getArticleId(id);
 
-		if(isLoginMemberId(foundArticle)) {
+		if (isLoginMemberId(foundArticle)) {
 			System.out.println("권한이 없습니다.");
 			return;
 		}
@@ -193,7 +184,7 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물이 없습니다.\n", id);
 			return;
 		}
-		if(isLoginMemberId(foundArticle)) {
+		if (isLoginMemberId(foundArticle)) {
 			System.out.println("권한이 없습니다.");
 			return;
 		}
@@ -202,7 +193,7 @@ public class ArticleController extends Controller {
 //			System.out.println("권한이 없습니다.");
 //			return;
 //		}
-		
+
 		System.out.printf("수정할 제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("수정할 내용 : ");
@@ -214,9 +205,9 @@ public class ArticleController extends Controller {
 		System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
 	}
 
-	//게시글 작성자와 로그인을 한 작성자가 동일한지 검사하는 함수
+	// 게시글 작성자와 로그인을 한 작성자가 동일한지 검사하는 함수
 	private boolean isLoginMemberId(Article foundArticle) {
-		return foundArticle.loginMembeId != loginedMember.id;
+		return foundArticle.MembeId != loginedMember.id;
 	}
 
 	// 사용자가 원하는 게시글이 있는 객체를 알려주는 함수

@@ -39,8 +39,8 @@ public class App {
 				continue;
 			}
 
-			String controllerMessage = cmdBits[0];// write, join
-			String methodMessage = cmdBits[1];
+			String controllerMessage = cmdBits[0];// article
+			String methodMessage = cmdBits[1];// write
 
 			Controller controller = null;
 
@@ -52,6 +52,29 @@ public class App {
 				System.out.println("존재하지 않는 명령어 입니다.\n");
 				continue;
 			}
+
+			String actionName = controllerMessage + "/" + methodMessage;
+
+			switch (actionName) {
+			case "article/write":
+			case "article/modify":
+			case "article/delete":
+			case "member/profile":
+			case "member/logout":
+				if (Controller.isLoqined() == false) {
+					System.out.println("로그인 후 이용해주세요");
+					continue;
+				}
+				break;
+			case "member/join":
+			case "member/login":
+				if (Controller.isLoqined()) {
+					System.out.println("로그아웃 후 이용해주세요");
+					continue;
+				}
+				break;
+			}
+
 			controller.doAction(cmd, methodMessage);
 		}
 
