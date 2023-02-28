@@ -5,20 +5,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.java.BAM.container.Container;
 import com.koreaIT.java.BAM.dto.Article;
+import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller {
 
 	private List<Article> articles; // 모든 게시글을 저장하고 있는 변수
 	private Scanner sc;
-	private int lastArticleId;// 게시글의 방번호를 저장하는 변수
 	private String cmd;// 사용자가 원하는 명령을 저장하는 함수
 
 	public ArticleController(Scanner sc) {
-		this.articles = new ArrayList<>();
+		this.articles = Container.articleDao.articles;
 		this.sc = sc;
-		this.lastArticleId = 3;
 	}
 
 	@Override
@@ -27,7 +27,6 @@ public class ArticleController extends Controller {
 
 		switch (methodName) {
 		case "write":
-
 			doWrite();
 			break;
 		case "list":
@@ -37,11 +36,9 @@ public class ArticleController extends Controller {
 			showDetail();
 			break;
 		case "modify":
-
 			doModify();
 			break;
 		case "delete":
-
 			doDelete();
 			break;
 		default:
@@ -53,9 +50,8 @@ public class ArticleController extends Controller {
 	// 게시글 작성 함수
 	private void doWrite() {
 
-		int id = lastArticleId + 1; // 회원이 가지고 있는 고유번호
-		lastArticleId = id;
-
+		int id = Container.articleDao.getLastId(); // 회원이 가지고 있는 고유번호
+		
 		System.out.printf("제목 : ");
 		String title = sc.nextLine(); // 제목의 변수 : title
 		System.out.printf("내용 : ");
@@ -67,7 +63,8 @@ public class ArticleController extends Controller {
 		Article article = new Article(id, get_current_date_time, loginedMember.id, title, body);
 		// 입력받은 정보(종이)를 Article(노트)에 넘겨준다
 
-		articles.add(article);
+		Container.articleDao.add(article);
+		//articles.add(article);
 		// 정보를 저장한 article(노트)를 articles(책장)에 넣어서(.add) 정보를 저장하겠다
 		// 함수가 끝나면 정보가 사라지는 전역변수이므로 함수가 끝나기 전에 저장
 
@@ -100,13 +97,23 @@ public class ArticleController extends Controller {
 				return;
 			}
 		}
-
 		System.out.println("번호	|	제목	|		날짜		|	작성자	|	조회");
-
 		Collections.reverse(printArticles);
 		for (Article article : printArticles) {
-			System.out.printf("%d	|	%s	|	%s	|	%d	|	%d\n", article.id, article.title,
-					article.get_current_date_time, article.MembeId, article.views);
+			
+			String writerName = null;
+			
+			List<Member> members = Container.memberDao.members;
+			
+			for(Member member : members) {
+				if(article.MembeId == member.id) {
+					writerName = member.name;
+					break;
+				}
+			}
+			
+			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d\n", article.id, article.title, article.get_current_date_time, writerName,
+					article.views);
 		}
 	}
 
@@ -130,12 +137,23 @@ public class ArticleController extends Controller {
 			return;
 		}
 
+		String writerName = null;
+		
+		List<Member> members = Container.memberDao.members;
+		
+		for(Member member : members) {
+			if(foundArticle.MembeId == member.id) {
+				writerName = member.name;
+				break;
+			}
+		}
+		
 		foundArticle.getViewsCnt();
 
 		System.out.printf("번호 : %d\n", foundArticle.id);
 		System.out.printf("날짜 : %s\n", foundArticle.get_current_date_time.substring(0, 10)); // substring : 출력을
 																								// 짤라주는 함수
-		System.out.printf("작성자 : %d\n", foundArticle.MembeId);
+		System.out.printf("작성자 : %s\n", writerName);
 		System.out.printf("제목 : %s\n", foundArticle.title);
 		System.out.printf("내용 : %s\n", foundArticle.body);
 		System.out.printf("조회수 : %d\n", foundArticle.views);
@@ -224,14 +242,9 @@ public class ArticleController extends Controller {
 	public void makeTestData() {
 		System.out.println("게시물 테스트 데이터를 생성합니다.");
 
-//		String get_current_date_time = Util.gettine();
-
-//		Article article1 = new Article(1, get_current_date_time, " title1", "body1", 10);
-//		Article article2 = new Article(2, get_current_date_time, " title2", "body2", 20);
-//		Article article3 = new Article(3, get_current_date_time, " title3", "body3", 30);
-		articles.add(new Article(1, Util.gettine(), 1, " 제목1", "내용1", 10));
-		articles.add(new Article(2, Util.gettine(), 2, " 제목2", "내용2", 20));
-		articles.add(new Article(3, Util.gettine(), 3, " 제목3", "내용3", 30));
+		Container.articleDao.add(new Article(Container.articleDao.getLastId(), Util.gettine(), 1, " 제목1", "내용1", 10));
+		Container.articleDao.add(new Article(Container.articleDao.getLastId(), Util.gettine(), 2, " 제목2", "내용2", 20));
+		Container.articleDao.add(new Article(Container.articleDao.getLastId(), Util.gettine(), 3, " 제목3", "내용3", 30));
 	}
 
 }

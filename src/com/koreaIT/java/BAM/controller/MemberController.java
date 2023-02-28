@@ -1,9 +1,9 @@
 package com.koreaIT.java.BAM.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.java.BAM.container.Container;
 import com.koreaIT.java.BAM.dto.Member;
 import com.koreaIT.java.BAM.util.Util;
 
@@ -11,13 +11,11 @@ public class MemberController extends Controller {
 
 	private List<Member> members; // 모든 로그인 정보를 가지고 있는 변수
 	private Scanner sc;
-	private int lastMemberId;// 회원 가입한 사용자의 고유 번호
 
 	public MemberController(Scanner sc) {
 		// 외부(App)에서 만든 리모콘을 넘겨받고 조정할 수 있게
-		this.members = new ArrayList<>();
+		this.members = Container.memberDao.members;
 		this.sc = sc;
-		this.lastMemberId = 3;
 
 	}
 
@@ -70,8 +68,8 @@ public class MemberController extends Controller {
 	// 로그인 함수
 	private void dojoin() {
 
-		int id = lastMemberId + 1; // 회원이 가지고 있는 고유번호
-		lastMemberId = id;
+		int id = Container.memberDao.getLastId(); // 회원이 가지고 있는 고유번호
+		
 
 		String LoginID = null;
 		String LoginPassword = null;
@@ -160,9 +158,9 @@ public class MemberController extends Controller {
 	// 멤버스 테스트 데이터
 	public void makeTestData() {
 		System.out.println("로그인 테스트 데이터를 생성합니다.");
-		members.add(new Member(1, Util.gettine(), "test1", "test1", "테스트1"));
-		members.add(new Member(2, Util.gettine(), "test2", "test2", "테스트2"));
-		members.add(new Member(3, Util.gettine(), "test3", "test3", "테스트3"));
+		Container.memberDao.add(new Member(Container.memberDao.getLastId(), Util.gettine(), "test1", "test1", "테스트1"));
+		Container.memberDao.add(new Member(Container.memberDao.getLastId(), Util.gettine(), "test2", "test2", "테스트2"));
+		Container.memberDao.add(new Member(Container.memberDao.getLastId(), Util.gettine(), "test3", "test3", "테스트3"));
 
 	}
 
