@@ -44,20 +44,40 @@ public class MemberController extends Controller {
 	// 회원가입 함수
 	private void doLogin() {
 
-		System.out.printf("로그인 아이디  : ");
-		String LoginID = sc.nextLine();
-		System.out.printf("로그인 비밀번호  : ");
-		String LoginPasswordheck = sc.nextLine();
+		String LoginID = null;
+		String LoginPasswordheck = null;
+		Member member = null;
 
-		Member member = getMembeByLoginId(LoginID);
+		while (true) {
+			System.out.printf("로그인 아이디  : ");
+			LoginID = sc.nextLine();
 
-		if (member == null) {
-			System.err.println("존재하지 않는 아이디 입니다.");
-			return;
-		}
-		if (member.LoginPassword.equals(LoginPasswordheck) == false) {
-			System.err.println("비밀번호를 확인해주세요");
-			return;
+			if (LoginID.trim().length() == 0) {
+				System.out.println("로그인 아이디를 입력해주세요");
+				continue;
+			}
+			while (true) {
+				System.out.printf("로그인 비밀번호  : ");
+				LoginPasswordheck = sc.nextLine();
+
+				if (LoginPasswordheck.trim().length() == 0) {
+					System.out.println("로그인 비밀번호를 입력해주세요");
+					continue;
+				}
+				break;
+			}
+
+			member = getMembeByLoginId(LoginID);
+
+			if (member == null) {
+				System.err.println("존재하지 않는 아이디 입니다.");
+				return;
+			}
+			if (member.LoginPassword.equals(LoginPasswordheck) == false) {
+				System.err.println("비밀번호를 확인해주세요");
+				return;
+			}
+			break;
 		}
 
 		loginedMember = member;
@@ -69,7 +89,6 @@ public class MemberController extends Controller {
 	private void dojoin() {
 
 		int id = Container.memberDao.getLastId(); // 회원이 가지고 있는 고유번호
-		
 
 		String LoginID = null;
 		String LoginPassword = null;
