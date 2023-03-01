@@ -1,6 +1,5 @@
 package com.koreaIT.java.BAM.controller;
 
-import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.java.BAM.container.Container;
@@ -9,12 +8,12 @@ import com.koreaIT.java.BAM.util.Util;
 
 public class MemberController extends Controller {
 
-	private List<Member> members; // 모든 로그인 정보를 가지고 있는 변수
+	//private List<Member> members; // 모든 로그인 정보를 가지고 있는 변수
 	private Scanner sc;
 
 	public MemberController(Scanner sc) {
 		// 외부(App)에서 만든 리모콘을 넘겨받고 조정할 수 있게
-		this.members = Container.memberDao.members;
+		//this.members = Container.memberDao.members;
 		this.sc = sc;
 
 	}
@@ -67,7 +66,9 @@ public class MemberController extends Controller {
 				break;
 			}
 
-			member = getMembeByLoginId(LoginID);
+			
+			member = Container.memberService.getMembeByLoginId(LoginID);
+			
 
 			if (member == null) {
 				System.err.println("존재하지 않는 아이디 입니다.");
@@ -88,7 +89,8 @@ public class MemberController extends Controller {
 	// 로그인 함수
 	private void dojoin() {
 
-		int id = Container.memberDao.getLastId(); // 회원이 가지고 있는 고유번호
+		int id = Container.memberService.getLastId(); // 회원이 가지고 있는 고유번호
+		//int id = Container.memberDao.getLastId(); // 회원이 가지고 있는 고유번호
 
 		String LoginID = null;
 		String LoginPassword = null;
@@ -132,7 +134,8 @@ public class MemberController extends Controller {
 		String get_current_date_time = Util.gettine();
 
 		Member member = new Member(id, get_current_date_time, LoginID, LoginPassword, name);
-		members.add(member);
+		
+		Container.memberService.add(member);
 
 		System.out.printf("%s회원님의 회원가입이 환영합니다.\n", name);
 	}
@@ -155,7 +158,7 @@ public class MemberController extends Controller {
 	// 중복된 아이디가 있는지 검사하는 함수
 	private boolean LoginIdDupchk(String LoginID) {
 
-		Member member = getMembeByLoginId(LoginID);
+		Member member = Container.memberService.getMembeByLoginId(LoginID);
 
 		if (member != null) {
 			return false;
@@ -163,23 +166,15 @@ public class MemberController extends Controller {
 		return true;
 	}
 
-	// 로그인 아이디 확인 후 해당 아이디가 맞을 경우 해당 아이디가 있는 객체를 연결해주는 함수
-	private Member getMembeByLoginId(String loginID) {
 
-		for (Member member : members) {
-			if (member.LoginID.equals(loginID)) {
-				return member;
-			}
-		}
-		return null;
-	}
 
 	// 멤버스 테스트 데이터
 	public void makeTestData() {
 		System.out.println("로그인 테스트 데이터를 생성합니다.");
-		Container.memberDao.add(new Member(Container.memberDao.getLastId(), Util.gettine(), "test1", "test1", "테스트1"));
-		Container.memberDao.add(new Member(Container.memberDao.getLastId(), Util.gettine(), "test2", "test2", "테스트2"));
-		Container.memberDao.add(new Member(Container.memberDao.getLastId(), Util.gettine(), "test3", "test3", "테스트3"));
+		
+		Container.memberService.add(new Member(Container.memberService.getLastId(), Util.gettine(), "test1", "test1", "테스트1"));
+		Container.memberService.add(new Member(Container.memberService.getLastId(), Util.gettine(), "test2", "test2", "테스트2"));
+		Container.memberService.add(new Member(Container.memberService.getLastId(), Util.gettine(), "test3", "test3", "테스트3"));
 
 	}
 

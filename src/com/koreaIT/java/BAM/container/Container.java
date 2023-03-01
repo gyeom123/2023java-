@@ -14,6 +14,8 @@ public class Container {
 	static {
 		articleDao = new ArticleDao();
 		memberDao = new MemberDao();
+		articleService = new ArticleService();
+		memberService = new MemberService();
 	}
 
 }
